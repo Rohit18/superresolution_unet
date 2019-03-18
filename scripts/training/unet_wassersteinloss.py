@@ -11,7 +11,7 @@ path_lr = '/users/PAS1437/osu10674/Data/L8_64_LR_512'
 
 il = ImageList.from_folder(path_hr)
 
-lr = 1e-3
+lr = 1e-4
 
 def calc_2_moments(tensor):
     chans = tensor.shape[1]
@@ -73,9 +73,9 @@ def do_fit(save_name, epochs, lrs=slice(lr), pct_start=0.9):
 
 if __name__ == '__main__':
     
-    bs,size= 8, 512
+    bs,size= 4, 512
     arch = models.resnet34
-    src = ImageImageList.from_folder(path_lr).random_split_by_pct(0.05, seed=42)
+    src = ImageImageList.from_folder(path_lr).random_split_by_pct(0.1, seed=42)
 
     data = get_data(bs,size)
 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     blocks = [i-1 for i,o in enumerate(children(vgg_m)) if isinstance(o,nn.MaxPool2d)]
     blocks, [vgg_m[i] for i in blocks]
 
-    x = torch.rand([32, 256, 1024], device=0, requires_grad=True)
+    x = torch.rand([32, 256, 1024], requires_grad=True)
 
     feat_loss = FeatureLoss_Wass(vgg_m, blocks[2:5], [5,15,2], [3, 0.7, 0.01])
 
